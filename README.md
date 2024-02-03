@@ -17,4 +17,5 @@ StopWazeGPS(playerid);
 IsValidWazeGPS(playerid);
 ```
 
-## Print Screen
+## Print
+![Logo do Projeto](https://i.imgur.com/GD9aKcK.png)
