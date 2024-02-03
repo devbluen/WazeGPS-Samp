@@ -9,11 +9,11 @@
 */
 
 
-#if defined include_valk_gps
+#if defined include_waze_gps
 	#endinput
 #endif
 
-#define include_valk_gps
+#define include_waze_gps
 
 			// Definers
 #define 	MAX_WAZE_DOTS 			(100)
