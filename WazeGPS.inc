@@ -37,7 +37,8 @@ enum wazeGPS_Enum {
 	Float:wazeGPS_TickPosition[3]
 };
 
-static wazeGPS[MAX_PLAYERS][wazeGPS_Enum];
+static 
+    wazeGPS[MAX_PLAYERS][wazeGPS_Enum];
 
 hook OnPlayerConnect(playerid) {
 
@@ -62,11 +63,8 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 		case PLAYER_STATE_ONFOOT: return StopWazeGPS(playerid);
 		case PLAYER_STATE_PASSENGER:
 		{
-			new vehicleid = GetPlayerVehicleID(playerid);
-			foreach(new i: Player) {
+			foreach(new i: VehicleOccupant[GetPlayerVehicleID(playerid)]) {
 				if(GetPlayerState(i) != PLAYER_STATE_DRIVER) continue;
-				if(GetPlayerVehicleID(i) != vehicleid) continue;
-
 				SetPlayerWaze(playerid, wazeGPS[playerid][wazeGPS_Position][0], wazeGPS[playerid][wazeGPS_Position][1], wazeGPS[playerid][wazeGPS_Position][2], wazeGPS[playerid][wazeGPS_Color]);
 				break;
 			}
@@ -89,9 +87,12 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
 */
 
+stock Float:GDBP(Float:X, Float:Y, Float:Z, Float:PointX, Float:PointY, Float:PointZ) 
+    return (floatsqroot(floatadd(floatadd(floatpower(floatsub(X, PointX), 2.0), floatpower(floatsub(Y, PointY), 2.0)), floatpower(floatsub(Z, PointZ), 2.0))));
+
 stock SetPlayerWaze(playerid, Float:x, Float:y, Float:z, color = 0x8A44E4FF) {
 	
-	if(!IsPlayerInAnyVehicle(playerid)) return true;
+	if(IsPlayerInAnyVehicle(playerid)) return true;
 	DestroyWazeRoutesGPS(playerid);		// Destroy Routes if exists.
 
 	wazeGPS[playerid][wazeGPS_Color] = color;
@@ -129,17 +130,22 @@ static stock DestroyWazeRoutesGPS(playerid) {
 static stock CreateWazePointer(playerid, Float:X1, Float:Y1, Float:X2, Float:Y2, color) {
 
 	new 
-		Float:Dis = 12.5,
-		Float:x,
-		Float:y,
+        Float:Dis = 12.5,
+        Float:x, Float:y,
 		Points = floatround(GDBP(X1, Y1, 0.0, X2, Y2, 0.0) / Dis);
 
 	for(new i = 1; i <= Points; i++) {
 
-		switch(i) {
-			case 0: {x = X1; y = Y1;}
-			default: {x = X1 + (((X2 - X1) / Points) * i); y = Y1 + (((Y2 - Y1) / Points) * i);}
-		}
+        switch(i) {
+            case 0: {
+                x = X1;
+			    y = Y1;
+            }
+            default: {
+                x = X1 + (((X2 - X1) / Points) * i);
+			    y = Y1 + (((Y2 - Y1) / Points) * i);
+            }
+        }
 
 		new slot = 0;
 		while(slot <= MAX_WAZE_DOTS) {
@@ -152,14 +158,10 @@ static stock CreateWazePointer(playerid, Float:X1, Float:Y1, Float:X2, Float:Y2,
 		}
 		if(slot == -1) return;
 
-		wazeGPS[playerid][wazeGPS_Routes][slot] = GangZoneCreate(x - (Dis / 2)-  5, y - (Dis / 2) - 5, x + (Dis / 2) + 5, y + (Dis / 2) + 5); 
+        wazeGPS[playerid][wazeGPS_Routes][slot] = GangZoneCreate(x - (Dis / 2)-  5, y - (Dis / 2) - 5, x + (Dis / 2) + 5, y + (Dis / 2) + 5); 
 		GangZoneShowForPlayer(playerid, wazeGPS[playerid][wazeGPS_Routes][slot], color);
 	}
-}
-
-static stock GDBP(Float:X, Float:Y, Float:Z, Float:PointX, Float:PointY, Float:PointZ) {
-	new Float:tempFloat = (floatsqroot(floatadd(floatadd(floatpower(floatsub(X, PointX), 2.0), floatpower(floatsub(Y, PointY), 2.0)), floatpower(floatsub(Z, PointZ), 2.0))));
-	return _:tempFloat;
+    return;
 }
 
 
@@ -190,13 +192,15 @@ public UpdateWaze(playerid, Float:X, Float:Y, Float:Z) {
 	GetPlayerPos(playerid, wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2]);
     if(GetClosestMapNodeToPoint(wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2], start) != 0) return true;
     if(GetClosestMapNodeToPoint(X, Y, Z, target)) return true;
-	if(FindPathThreaded(start, target, "OnPlayerWazeRouters", "i", playerid)) return true;
+	if(FindPathThreaded(start, target, "OnPlayerWazeRouters", "i", playerid)) return true; 
     return true;
 }
 
 public OnPlayerWazeRouters(Path:pathid, playerid) {
-	if(wazeGPS[playerid][wazeGPS_Timer] == 0) return true;
     if(!IsValidPath(pathid)) return true;
+	if(wazeGPS[playerid][wazeGPS_Timer] == 0) return true;
+
+    DestroyWazeRoutesGPS(playerid);
 
 	new 
 		Float:length,
@@ -206,8 +210,7 @@ public OnPlayerWazeRouters(Path:pathid, playerid) {
 	GetPathLength(pathid, length);
 
 	if(size == 1) return StopWazeGPS(playerid);
-	DestroyWazeRoutesGPS(playerid);
-
+	
 	new 
 		MapNode:nodeid,
 		Float:x,
