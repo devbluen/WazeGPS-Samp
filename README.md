@@ -2,7 +2,7 @@
 This is a system inspired by GTA V where it will create a route to the selected destination on your SAMP server.
 
 ## Dependencies
-- [@GPS Plugin](https://github.com/kristoisberg/samp-gps-plugin)
+- [@GPS Plugin](https://github.com/kristoisberg/samp-gps-plugin) **Download Version 1.4.0 of the Plugin, as 1.4.1 has a loading Error!**
 - [@YSI Includes](https://github.com/pawn-lang/YSI-Includes)
 
 ## How to install?
