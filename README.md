@@ -7,6 +7,7 @@ This is a system inspired by GTA V where it will create a route to the selected 
 
 ## How to install?
 - Add the WazeGPS include to the **"Pawno > Includes"** folder
+- Write **#include \<GPS\>** in your gamemode
 - Write **#include \<WazeGPS\>** in your gamemode
 - Remember to install the GPS Plugin first and add the **#include \<GPS\> before Waze** so that everything works correctly
 
