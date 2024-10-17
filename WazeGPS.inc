@@ -54,10 +54,6 @@ hook OnPlayerStateChange(playerid, newstate, oldstate) {
 
 	switch(newstate) 
     {
-		case PLAYER_STATE_ONFOOT: {
-            StopWazeGPS(playerid);
-            return Y_HOOKS_CONTINUE_RETURN_1;
-        }
 		case PLAYER_STATE_PASSENGER:
 		{
 			foreach(new i: VehicleOccupant[GetPlayerVehicleID(playerid)]) {
