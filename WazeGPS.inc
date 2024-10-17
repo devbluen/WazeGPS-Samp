@@ -182,8 +182,6 @@ static stock WazeGPS_Reset(playerid) {
 }
 
 stock SetPlayerWaze(playerid, Float:x, Float:y, Float:z, color = 0x8A44E4FF) {
-	
-	if(IsPlayerInAnyVehicle(playerid)) return true;
 	DestroyWazeRoutesGPS(playerid);		// Destroy Routes if exists.
 
 	wazeGPS[playerid][wazeGPS_Color] = color;
