@@ -48,7 +48,7 @@ public OnPlayerDisconnect(playerid, reason) {
 	WazeGPS_Reset(playerid);
 
     #if defined alsOnPlayerDisconnect
-        alsOnPlayerDisconnect(playerid, reason);
+        return alsOnPlayerDisconnect(playerid, reason);
     #else
    	 	return true;
 	#endif
