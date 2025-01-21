@@ -20,8 +20,10 @@
 #define include_waze_gps
 
 			// Definers
+/*MAX_WAZE_DOTS = Max 1024(Samp Limit) - You can increase the size of the route display on the map according to
+the amount of GangZones on your server: 1024 - MY_TOTAL_CREATED_GZS = The maximum amount you can increase.*/
 #define 	MAX_WAZE_DOTS 			(100)
-#define 	WAZE_UPDATE_TIME 		(3100)
+#define 	WAZE_UPDATE_TIME 		(1000)
 
 			// Forrwards
 forward UpdateWaze(playerid, Float:X, Float:Y, Float:Z);
@@ -92,8 +94,6 @@ public UpdateWaze(playerid, Float:X, Float:Y, Float:Z) {
 		MapNode:start,
 		MapNode:target;
 
-	DestroyWazeRoutesGPS(playerid);
-
 	GetPlayerPos(playerid, wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2]);
     if(GetClosestMapNodeToPoint(wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2], start) != 0) return true;
     if(GetClosestMapNodeToPoint(X, Y, Z, target)) return true;
@@ -108,7 +108,9 @@ public OnPlayerWazeRouters(Path:pathid, playerid) {
 	new size;
 	GetPathSize(pathid, size);
 	if(size == 1) return StopWazeGPS(playerid);
-	
+
+	DestroyWazeRoutesGPS(playerid);
+
 	new 
 		MapNode:nodeid,
 		Float:x,
