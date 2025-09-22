@@ -2,7 +2,8 @@
 This is a system inspired by GTA V where it will create a route to the selected destination on your SAMP server.
 
 ## Dependencies
-- [@GPS Plugin](https://github.com/kristoisberg/samp-gps-plugin) **Download Version 1.4.0 of the Plugin, as 1.4.1 has a loading Error!**
+- [@GPS Plugin](https://github.com/kristoisberg/samp-gps-plugin)
+- [@samp-player-gangzones](https://github.com/AmyrAhmady/samp-player-gangzones) (Optional, but allows long routes to appear completely on the map without limits)
 
 ## How to install?
 
