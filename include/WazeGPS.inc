@@ -20,10 +20,9 @@
 #define include_waze_gps
 
 			// Definers
-/*MAX_WAZE_DOTS = Max 1024(Samp Limit) - You can increase the size of the route display on the map according to
-the amount of GangZones on your server: 1024 - MY_TOTAL_CREATED_GZS = The maximum amount you can increase.*/
-#define 	MAX_WAZE_DOTS 			(100)
+#define 	MAX_WAZE_DOTS 			(1000)
 #define 	WAZE_UPDATE_TIME 		(1000)
+#define 	WAZE_THICKNESS 			2
 
 			// Forrwards
 forward UpdateWaze(playerid, Float:X, Float:Y, Float:Z);
@@ -50,7 +49,7 @@ public OnPlayerDisconnect(playerid, reason) {
 	WazeGPS_Reset(playerid);
 
     #if defined alsOnPlayerDisconnect
-        return alsOnPlayerDisconnect(playerid, reason);
+        alsOnPlayerDisconnect(playerid, reason);
     #else
    	 	return true;
 	#endif
@@ -94,6 +93,8 @@ public UpdateWaze(playerid, Float:X, Float:Y, Float:Z) {
 		MapNode:start,
 		MapNode:target;
 
+	DestroyWazeRoutesGPS(playerid);
+
 	GetPlayerPos(playerid, wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2]);
     if(GetClosestMapNodeToPoint(wazeGPS[playerid][wazeGPS_TickPosition][0], wazeGPS[playerid][wazeGPS_TickPosition][1], wazeGPS[playerid][wazeGPS_TickPosition][2], start) != 0) return true;
     if(GetClosestMapNodeToPoint(X, Y, Z, target)) return true;
@@ -108,9 +109,7 @@ public OnPlayerWazeRouters(Path:pathid, playerid) {
 	new size;
 	GetPathSize(pathid, size);
 	if(size == 1) return StopWazeGPS(playerid);
-
-	DestroyWazeRoutesGPS(playerid);
-
+	
 	new 
 		MapNode:nodeid,
 		Float:x,
@@ -216,7 +215,7 @@ static stock DestroyWazeRoutesGPS(playerid) {
 static stock CreateWazePointer(playerid, Float:X1, Float:Y1, Float:X2, Float:Y2, color) {
 
 	new 
-        Float:Dis = 12.5,
+        Float:Dis = 8.0,
         Float:x, 
 		Float:y,
 		Float:GDPointers = GDBP(X1, Y1, 0.0, X2, Y2, 0.0),
@@ -234,7 +233,7 @@ static stock CreateWazePointer(playerid, Float:X1, Float:Y1, Float:X2, Float:Y2,
 		y = Y1 + (((Y2 - Y1) / Points) * i);
 
 		wazeGPS[playerid][wazeGPS_Created][index] = true;
-        wazeGPS[playerid][wazeGPS_Routes][index] = GangZoneCreate(x-(Dis/2)-5, y-(Dis/2)-5, x+(Dis/2)+5, y+(Dis/2)+5); 
+        wazeGPS[playerid][wazeGPS_Routes][index] = GangZoneCreate(x-(Dis/2)-WAZE_THICKNESS, y-(Dis/2)-WAZE_THICKNESS, x+(Dis/2)+WAZE_THICKNESS, y+(Dis/2)+WAZE_THICKNESS); 
 		GangZoneShowForPlayer(playerid, wazeGPS[playerid][wazeGPS_Routes][index], color);
 
 		wazeGPS[playerid][wazeGPS_Count]++;
